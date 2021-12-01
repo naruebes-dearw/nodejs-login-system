@@ -1,22 +1,25 @@
 const express = require('express');
 const session = require('express-session');
 const hbs = require('express-handlebars');
-const mongoose = require('mongoose');
 const passport = require('passport');
-const localStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
+require('dotenv').config();
+const mongoose = require('mongoose');
+const localStrategy = require('passport-local').Strategy;
 const { Strategy } = require('passport-local');
 const app = express();
 
+const port = process.env.PORT || 5000;
+
 // Running mongodb online
-const uri = "mongodb+srv://mern:mern123@cluster0.7rgtl.mongodb.net/login?retryWrites=true&w=majority";
+const uri = process.env.ATLAS_URI;
 mongoose.connect(uri, {
   useNewUrlParser: true,
   // useUnifiedTopology: true
 })
 const connection = mongoose.connection;
 connection.once('open', () => {
-    console.log("MongoDB database connection established successfully");
+  console.log("MongoDB database connection established successfully");
 })
 
 // Running mongodb on PC
@@ -67,11 +70,11 @@ passport.deserializeUser(function (id, done) {
 passport.use(new localStrategy(function (username, password, done) {
   User.findOne({ username: username }, function (err, user) {
     if (err) return done(err);
-    if (!user) return done(null, false, { message: 'Incorrect username.'});
+    if (!user) return done(null, false, { message: 'Incorrect username.' });
 
     bcrypt.compare(password, user.password, function (err, res) {
       if (err) return done(err);
-      if (res === false) return done(null, false, { message: 'Incorrect password.'});
+      if (res === false) return done(null, false, { message: 'Incorrect password.' });
 
       return done(null, user);
     });
@@ -144,6 +147,7 @@ app.get('/setup', async (req, res) => {
   });
 });
 
-app.listen(3000, () => {
-  console.log('listening on port 3000');
+app.listen(port, () => {
+  console.log(`Listening on port ${port}`);
+  console.log(`http://localhost:${port}`);
 });

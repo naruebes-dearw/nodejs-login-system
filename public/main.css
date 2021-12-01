@@ -57,6 +57,20 @@ form .form-group {
   margin-bottom: 30px;
 }
 
+.form-group p {
+  font-size: 0.9rem;
+  text-align: center;
+  color: #999;
+  background-color: #FFF;
+  padding: 5px 0;
+  border-radius: 5px;
+  margin-bottom: 15px;
+}
+
+.form-group p span {
+  color: #2f4960;
+}
+
 form label {
   display: block;
   color: #eee;
